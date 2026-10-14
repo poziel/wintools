@@ -1,0 +1,334 @@
+{
+  "version": "1.0",
+  "updated": "2025-01-27",
+  "categories": {
+    "hardware": {
+      "name": "Hardware & Diagnostics",
+      "icon": "🔧",
+      "description": "Tools for monitoring, benchmarking, and diagnosing hardware components including CPU, memory, storage, and system sensors."
+    },
+    "privacy": {
+      "name": "Privacy & Optimization",
+      "icon": "🔒",
+      "description": "Utilities to enhance system privacy, disable telemetry, remove bloatware, and optimize Windows performance."
+    },
+    "sysinternals": {
+      "name": "Microsoft Sysinternals",
+      "icon": "🔬",
+      "description": "Advanced system utilities from Microsoft for troubleshooting, monitoring processes, and analyzing system behavior."
+    },
+    "utilities": {
+      "name": "System Utilities",
+      "icon": "⚙️",
+      "description": "Essential system tools for file search, registry editing, activation, and general Windows management."
+    },
+    "packages": {
+      "name": "Package Managers",
+      "icon": "📦",
+      "description": "Graphical interfaces for managing software installations across multiple package managers."
+    }
+  },
+  "tools": [
+    {
+      "name": "blockrazer",
+      "displayName": "BlockRazer",
+      "vendor": "Chris Titus Tech",
+      "category": "utilities",
+      "description": "Disables automatic launch of Razer Synapse software and related services on Windows, minimizing background resource usage.",
+      "features": [
+        "Disables startup entries for Razer Synapse",
+        "Stops and disables Razer services running in the background",
+        "Reversible - can re-enable services if needed"
+      ],
+      "url": "https://wintools.poziel.dev/blockrazer.txt",
+      "website": "https://github.com/ChrisTitusTech/block-razer"
+    },
+    {
+      "name": "cleanmgr",
+      "displayName": "Cleanmgr+",
+      "vendor": "Builtbybel",
+      "category": "privacy",
+      "description": "Enhanced disk cleanup utility that replaces Windows' built-in tool with additional cleanup options and a modern interface.",
+      "features": [
+        "All cleanup options from original Disk Cleanup plus customizations",
+        "Removes temporary files, system cache, Windows Update remnants",
+        "Advanced cleanup for system areas not accessible in default tool",
+        "Modern user-friendly interface with checkboxes",
+        "Automation options for scheduled cleanups"
+      ],
+      "url": "https://wintools.poziel.dev/cleanmgr.txt",
+      "website": "https://github.com/builtbybel/CleanmgrPlus"
+    },
+    {
+      "name": "cpuz",
+      "displayName": "CPU-Z",
+      "vendor": "CPUID",
+      "category": "hardware",
+      "description": "Lightweight system profiling tool that provides detailed information on CPU, motherboard, memory, and hardware components.",
+      "features": [
+        "Detailed CPU information: architecture, clock speed, cache levels",
+        "Motherboard specifications: model, chipset, BIOS version",
+        "Memory module details: type, size, speed",
+        "Real-time monitoring of CPU core frequencies and voltage",
+        "Portable and easy to use"
+      ],
+      "url": "https://wintools.poziel.dev/cpuz.txt",
+      "website": "https://www.cpuid.com/softwares/cpu-z.html"
+    },
+    {
+      "name": "diskinfo",
+      "displayName": "CrystalDiskInfo",
+      "vendor": "Crystal Dew World",
+      "category": "hardware",
+      "description": "Disk health monitoring tool that provides detailed drive information including temperature, health status, and S.M.A.R.T. attributes.",
+      "features": [
+        "Monitors health status, temperature, and S.M.A.R.T. info for HDDs/SSDs",
+        "Real-time alerts for potential drive issues",
+        "Power-on hours, reallocated sector count, and other metrics",
+        "Customizable alert thresholds for specific attributes",
+        "Portable and easy to use"
+      ],
+      "url": "https://wintools.poziel.dev/diskinfo.txt",
+      "website": "https://crystalmark.info/en/software/crystaldiskinfo/"
+    },
+    {
+      "name": "diskmark",
+      "displayName": "CrystalDiskMark",
+      "vendor": "Crystal Dew World",
+      "category": "hardware",
+      "description": "Disk benchmarking tool that measures read and write speeds of storage devices with detailed performance metrics.",
+      "features": [
+        "Sequential and random read/write tests",
+        "Multiple test sizes and configurations",
+        "Detailed metrics: MB/s and IOPS",
+        "Customizable test parameters (queue depth, duration)",
+        "Portable and thorough performance testing"
+      ],
+      "url": "https://wintools.poziel.dev/diskmark.txt",
+      "website": "https://crystalmark.info/en/software/crystaldiskmark/"
+    },
+    {
+      "name": "everything",
+      "displayName": "Everything",
+      "vendor": "Voidtools",
+      "category": "utilities",
+      "description": "Fast and efficient search utility for Windows that instantly locates files and folders with minimal resource usage.",
+      "features": [
+        "Instant file indexing with real-time results",
+        "Search by file name, folder, size, and date modified",
+        "Minimal system resource usage",
+        "Advanced search operators for complex queries",
+        "Bookmarks for frequent searches and export results"
+      ],
+      "url": "https://wintools.poziel.dev/everything.txt",
+      "website": "https://www.voidtools.com/"
+    },
+    {
+      "name": "hwinfo",
+      "displayName": "HWiNFO",
+      "vendor": "HWiNFO",
+      "category": "hardware",
+      "description": "Comprehensive hardware information and diagnostic tool with in-depth system monitoring, sensor data, and reporting.",
+      "features": [
+        "Detailed information on CPU, GPU, memory, storage",
+        "Real-time sensor monitoring: temperatures, voltages, fan speeds",
+        "Customizable reports for diagnostics and health checks",
+        "Alert and notification system based on sensor thresholds",
+        "Extensive logging options for performance tracking"
+      ],
+      "url": "https://wintools.poziel.dev/hwinfo.txt",
+      "website": "https://www.hwinfo.com/"
+    },
+    {
+      "name": "mas",
+      "displayName": "Microsoft Activation Scripts",
+      "vendor": "MASSGRAVE",
+      "category": "utilities",
+      "description": "Script suite for activating Windows and Office products with flexible activation options.",
+      "features": [
+        "Multiple activation methods",
+        "Support for Windows and Office products",
+        "Open-source and community-maintained",
+        "Flexible activation options"
+      ],
+      "url": "https://wintools.poziel.dev/mas.txt",
+      "website": "https://github.com/massgravel/Microsoft-Activation-Scripts"
+    },
+    {
+      "name": "microsoft-autoruns",
+      "displayName": "Autoruns",
+      "vendor": "Microsoft Sysinternals",
+      "category": "sysinternals",
+      "description": "Powerful utility for managing startup items, allowing users to view, manage, and disable programs and services that run automatically.",
+      "features": [
+        "Comprehensive lists of startup items: programs, services, drivers, scheduled tasks",
+        "Enable/disable startup entries with one click",
+        "Identifies startup item locations across registry and file system",
+        "Highlights known malware entry points and Microsoft items",
+        "Online search for additional details on startup items"
+      ],
+      "url": "https://wintools.poziel.dev/microsoft-autoruns.txt",
+      "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns"
+    },
+    {
+      "name": "microsoft-procexp",
+      "displayName": "Process Explorer",
+      "vendor": "Microsoft Sysinternals",
+      "category": "sysinternals",
+      "description": "Advanced task manager utility that provides in-depth insight into active processes and system resource usage.",
+      "features": [
+        "Hierarchical view of all running processes",
+        "Detailed process attributes: CPU, memory, I/O usage, threads, handles",
+        "Real-time monitoring of resource-intensive processes",
+        "Search tool to locate which processes use specific files/DLLs",
+        "Process killing and suspension options"
+      ],
+      "url": "https://wintools.poziel.dev/microsoft-procexp.txt",
+      "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/process-explorer"
+    },
+    {
+      "name": "microsoft-procmon",
+      "displayName": "Process Monitor",
+      "vendor": "Microsoft Sysinternals",
+      "category": "sysinternals",
+      "description": "Real-time monitoring tool that captures detailed events related to file system, registry, and process activity.",
+      "features": [
+        "Monitors file system, registry, network, and process events",
+        "Powerful filtering options to isolate specific events",
+        "Event detail views with process info, timestamps, action results",
+        "Save and export captured data for analysis",
+        "Stack trace capture for code-level diagnostics"
+      ],
+      "url": "https://wintools.poziel.dev/microsoft-procmon.txt",
+      "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/procmon"
+    },
+    {
+      "name": "ooapb",
+      "displayName": "O&O AppBuster",
+      "vendor": "O&O Software",
+      "category": "privacy",
+      "description": "Free tool that helps users manage and remove unwanted pre-installed applications and bloatware from Windows 10/11.",
+      "features": [
+        "Lists all pre-installed apps including hidden and protected system apps",
+        "Selective removal of unwanted applications and bundled software",
+        "Supports reinstallation of previously removed apps",
+        "Overview of app usage to help decide what to keep",
+        "Undo functionality to restore removed apps"
+      ],
+      "url": "https://wintools.poziel.dev/ooapb.txt",
+      "website": "https://www.oo-software.com/en/ooappbuster"
+    },
+    {
+      "name": "ooregedt",
+      "displayName": "O&O RegEditor",
+      "vendor": "O&O Software",
+      "category": "utilities",
+      "description": "Advanced Windows registry editor with enhanced features for better registry management and navigation.",
+      "features": [
+        "Search, edit, and navigate registry with improved speed",
+        "Address bar for quick navigation to specific registry paths",
+        "Bookmarking for frequently accessed registry keys",
+        "Export and import feature for backup and sharing",
+        "History function to track and revisit recent edits"
+      ],
+      "url": "https://wintools.poziel.dev/ooregedt.txt",
+      "website": "https://www.oo-software.com/en/ooregeditor"
+    },
+    {
+      "name": "oosu10",
+      "displayName": "O&O ShutUp10++",
+      "vendor": "O&O Software",
+      "category": "privacy",
+      "description": "Privacy-focused utility for Windows that controls and disables telemetry, tracking, and data-sharing features.",
+      "features": [
+        "Granular options to disable Windows telemetry and data collection",
+        "Turn off location tracking, feedback requests, activity history",
+        "One-click 'Recommended Settings' for quick privacy setup",
+        "Easy rollback of changes to restore defaults",
+        "Completely portable - no installation required"
+      ],
+      "url": "https://wintools.poziel.dev/oosu10.txt",
+      "website": "https://www.oo-software.com/en/shutup10"
+    },
+    {
+      "name": "optimizer",
+      "displayName": "Optimizer",
+      "vendor": "Hellzerg",
+      "category": "privacy",
+      "description": "Versatile tool for optimizing Windows systems with options to disable unnecessary services, remove bloatware, and enhance privacy.",
+      "features": [
+        "Disables telemetry, data collection, background services",
+        "Removes pre-installed Windows apps and bloatware",
+        "Performance improvements: disables animations, startup delays",
+        "Built-in firewall management tool",
+        "Portable and open-source"
+      ],
+      "url": "https://wintools.poziel.dev/optimizer.txt",
+      "website": "https://github.com/hellzerg/optimizer"
+    },
+    {
+      "name": "supermsconfig",
+      "displayName": "SuperMSConfig",
+      "vendor": "Builtbybel",
+      "category": "privacy",
+      "description": "Advanced system configuration tool that extends MSConfig functionality with more control over startup and services.",
+      "features": [
+        "In-depth management of startup programs and background services",
+        "Disable, enable, or delay startup items to optimize boot time",
+        "Manage Windows services with detailed descriptions",
+        "Control over scheduled tasks and system settings",
+        "Export and import configurations for easy setup"
+      ],
+      "url": "https://wintools.poziel.dev/supermsconfig.txt",
+      "website": "https://github.com/builtbybel/SuperMSConfig"
+    },
+    {
+      "name": "unigetui",
+      "displayName": "UniGetUI",
+      "vendor": "marticliment",
+      "category": "packages",
+      "description": "User interface for managing software packages on Windows in a simplified, visual environment.",
+      "features": [
+        "Intuitive UI for browsing and installing software packages",
+        "Support for multiple package sources",
+        "Manage installed software: update and uninstall packages",
+        "Search functionality to quickly locate applications",
+        "Graphical interface alternative to command-line operations"
+      ],
+      "url": "https://wintools.poziel.dev/unigetui.txt",
+      "website": "https://github.com/marticliment/UniGetUI"
+    },
+    {
+      "name": "winutils",
+      "displayName": "Windows Utility",
+      "vendor": "Chris Titus Tech",
+      "category": "privacy",
+      "description": "Comprehensive PowerShell-based tool to optimize, debloat, and customize Windows systems for better performance and security.",
+      "features": [
+        "Automated scripts for system cleanup and bloatware removal",
+        "Privacy and security enhancements: disable telemetry, tracking",
+        "Optimize system settings: power options, disable visual effects",
+        "Bulk uninstallation of pre-installed apps",
+        "Advanced network and firewall settings"
+      ],
+      "url": "https://wintools.poziel.dev/winutils.txt",
+      "website": "https://github.com/ChrisTitusTech/winutil"
+    },
+    {
+      "name": "xdantispy",
+      "displayName": "xd-AntiSpy",
+      "vendor": "Builtbybel",
+      "category": "privacy",
+      "description": "Privacy tool for Windows that disables telemetry and data collection features for enhanced control over personal data.",
+      "features": [
+        "Disables Windows telemetry, diagnostics, data-sharing",
+        "Blocks Microsoft's data collection servers",
+        "Selective deactivation of Cortana, location tracking, personalized ads",
+        "Advanced network and firewall settings",
+        "Simple checkbox-based interface"
+      ],
+      "url": "https://wintools.poziel.dev/xdantispy.txt",
+      "website": "https://github.com/builtbybel/xd-AntiSpy"
+    }
+  ]
+}
