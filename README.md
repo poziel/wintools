@@ -52,9 +52,9 @@ Use **Copy command** to copy a ready-to-run PowerShell command. The adjacent ico
 | Category | What it helps with | Examples |
 | --- | --- | --- |
 | Hardware & Diagnostics | Inspect hardware, monitor sensors and drive health, and benchmark storage. | CPU-Z, HWiNFO, CrystalDiskInfo, CrystalDiskMark |
-| Privacy & Optimization | Adjust privacy settings, reduce telemetry, and manage unwanted applications. | O&O ShutUp10++, O&O AppBuster, Optimizer, xd-AntiSpy |
-| Microsoft Sysinternals | Investigate startup entries, running processes, and system activity. | Autoruns, Process Explorer, Process Monitor |
-| System Utilities | Search files, clean up Windows, and work with the registry and other system tasks. | Everything, Cleanmgr+, O&O RegEditor |
+| Privacy & Optimization | Adjust privacy settings, reduce telemetry, and clean application data. | O&O ShutUp10++, O&O AppBuster, Optimizer, BleachBit |
+| Microsoft Sysinternals | Investigate startup entries, processes, network connections, and system activity. | Autoruns, Process Explorer, Process Monitor, TCPView |
+| System Utilities | Find files, analyze disk usage, create bootable USB drives, and maintain Windows. | Everything, WizTree, Rufus, Cleanmgr+, O&O RegEditor |
 | Package Managers | Browse, install, update, and remove software through a graphical interface. | UniGetUI |
 
 The [website catalog](https://wintools.poziel.dev/#catalog) contains the full selection and details for each tool.

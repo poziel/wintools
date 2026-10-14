@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2025-01-27",
+  "updated": "2026-10-14",
   "categories": {
     "hardware": {
       "name": "Hardware & Diagnostics",
@@ -29,6 +29,21 @@
     }
   },
   "tools": [
+    {
+      "name": "bleachbit",
+      "displayName": "BleachBit",
+      "vendor": "BleachBit",
+      "category": "privacy",
+      "description": "Clean application caches, temporary files, and browsing traces.",
+      "features": [
+        "Choose which applications and data types to clean.",
+        "Preview selected cleanup operations before deleting files.",
+        "Remove temporary files and application caches.",
+        "Runs from the official portable ZIP without installation."
+      ],
+      "url": "https://wintools.poziel.dev/bleachbit.txt",
+      "website": "https://www.bleachbit.org/"
+    },
     {
       "name": "blockrazer",
       "displayName": "BlockRazer",
@@ -203,6 +218,21 @@
       "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/procmon"
     },
     {
+      "name": "microsoft-tcpview",
+      "displayName": "TCPView",
+      "vendor": "Microsoft Sysinternals",
+      "category": "sysinternals",
+      "description": "Inspect TCP and UDP endpoints and the processes that own them.",
+      "features": [
+        "Display local and remote addresses and ports.",
+        "Identify the process associated with each endpoint.",
+        "Highlight connection changes as the view refreshes.",
+        "Save connection listings for troubleshooting."
+      ],
+      "url": "https://wintools.poziel.dev/microsoft-tcpview.txt",
+      "website": "https://learn.microsoft.com/en-us/sysinternals/downloads/tcpview"
+    },
+    {
       "name": "ooapb",
       "displayName": "O&O AppBuster",
       "vendor": "O&O Software",
@@ -267,6 +297,21 @@
       "website": "https://github.com/hellzerg/optimizer"
     },
     {
+      "name": "rufus",
+      "displayName": "Rufus",
+      "vendor": "Akeo Consulting",
+      "category": "utilities",
+      "description": "Create bootable USB drives from Windows, Linux, and recovery ISO images.",
+      "features": [
+        "Write bootable ISO images to USB drives.",
+        "Choose partition scheme and target system.",
+        "Format USB media through the graphical interface.",
+        "Uses the portable x64 release."
+      ],
+      "url": "https://wintools.poziel.dev/rufus.txt",
+      "website": "https://rufus.ie/"
+    },
+    {
       "name": "supermsconfig",
       "displayName": "SuperMSConfig",
       "vendor": "Builtbybel",
@@ -313,6 +358,21 @@
       ],
       "url": "https://wintools.poziel.dev/winutils.txt",
       "website": "https://github.com/ChrisTitusTech/winutil"
+    },
+    {
+      "name": "wiztree",
+      "displayName": "WizTree",
+      "vendor": "Antibody Software",
+      "category": "utilities",
+      "description": "Visual disk space analyzer for finding large files and folders.",
+      "features": [
+        "Scan disk usage and inspect a visual treemap.",
+        "Sort files and folders by size.",
+        "Export scan results for later comparison.",
+        "Portable x64 version; free for personal use."
+      ],
+      "url": "https://wintools.poziel.dev/wiztree.txt",
+      "website": "https://diskanalyzer.com/"
     },
     {
       "name": "xdantispy",
