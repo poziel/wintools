@@ -42,7 +42,7 @@ function icns(images) {
 
 
 
-const directory = resolve(root, 'tool-socket')
+const directory = root
 await mkdir(directory, { recursive: true })
 const masters = {}
 const pngs = {}
@@ -66,14 +66,10 @@ for (const [file,size,scale] of [
 ]) await writeFile(resolve(directory,`${file}.png`),await sharp(Buffer.from(device(scale))).resize(size,size).png().toBuffer())
 const backed=new Map()
 for(const size of sizes) backed.set(size,await sharp(Buffer.from(device(.9))).resize(size,size).png().toBuffer())
-await writeFile(resolve(directory,'favicon.ico'),ico([16,32,48].map(size=>({size,png:backed.get(size)}))))
+await writeFile(resolve(directory,'favicon.ico'),ico([16,32,48].map(size=>({size,png:pngs.light.get(size)}))))
 await writeFile(resolve(directory,'windows.ico'),ico([16,24,32,48,64,128,256].map(size=>({size,png:backed.get(size)}))))
 await writeFile(resolve(directory,'macos.icns'),icns([[16,'icp4'],[32,'icp5'],[64,'icp6'],[128,'ic07'],[256,'ic08'],[512,'ic09'],[1024,'ic10']].map(([size,type])=>({type,png:backed.get(size)}))))
 await writeFile(resolve(directory,'site.webmanifest'),JSON.stringify({name:'WinTools',short_name:'WinTools',start_url:'/',display:'standalone',background_color:badgeBackground,theme_color:forest,icons:[192,512].map(size=>({src:`android-chrome-${size}.png`,sizes:`${size}x${size}`,type:'image/png',purpose:'any'})).concat([{src:'maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}])},null,2)+'\n')
-const adaptive=masters.light.replace('</svg>',`<style>@media (prefers-color-scheme: dark) { path:nth-of-type(1) { fill: #c2f16a; } path:nth-of-type(2) { fill: #142b23; } path:nth-of-type(3) { stroke: #c2f16a; } }</style></svg>`)
-await writeFile(resolve('public/favicon.svg'),adaptive)
-await writeFile(resolve('public/favicon.ico'),await fsRead('favicon.ico'))
-function fsRead(name){return readFile(resolve(directory,name))}
 const composites=[]
 for(const [i,theme] of ['light','dark'].entries()) {
  const bg=theme==='light'?'#f7f8f4':'#141a17'

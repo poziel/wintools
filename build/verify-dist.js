@@ -19,10 +19,10 @@ for (const directory of ['scripts', 'commons']) {
     )
   }
 }
-for (const filename of ['get.ps1', 'tools.json', 'CNAME', '.nojekyll']) {
+for (const filename of ['get.ps1', 'tools.json']) {
   assert.deepEqual(readFileSync(resolve(distDir, filename)), readFileSync(resolve(publicDir, filename)), filename)
 }
 for (const filename of ['index.html']) {
   assert.match(readFileSync(resolve(distDir, filename), 'utf8'), /assets\//)
 }
-console.log(`Verified ${endpoints.size} script endpoints, original scripts, catalog, domain files, and the website entry.`)
+console.log(`Verified ${endpoints.size} script endpoints, original scripts, catalog, and the website entry.`)

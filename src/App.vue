@@ -13,7 +13,7 @@ const category = ref('all')
 const theme = ref(document.documentElement.dataset.theme || 'light')
 watchEffect(() => {
   const favicon = document.querySelector('#theme-favicon')
-  if (favicon) favicon.href = `/icons/tool-socket/logo-${theme.value}.svg`
+  if (favicon) favicon.href = `/icons/logo-${theme.value}.svg`
 })
 const visibleTools = computed(() => filterTools(catalog, query.value, category.value))
 const categories = Object.entries(catalog.categories).map(([key, value]) => ({
@@ -38,12 +38,12 @@ function reset() {
   <a class="skip-link" href="#catalog">Skip to tools</a>
   <div class="site-shell" >
     <header class="site-header">
-      <a class="brand" href="/" aria-label="WinTools home"><span class="brand-mark"><img :src="`/icons/tool-socket/logo-${theme}.svg`" width="37" height="37" alt="" /></span>WinTools<span class="brand-dot">.</span></a>
+      <a class="brand" href="/" aria-label="WinTools home"><span class="brand-mark"><img :src="`/icons/logo-${theme}.svg`" width="37" height="37" alt="" /></span>WinTools<span class="brand-dot">.</span></a>
       <nav class="header-nav" aria-label="Main navigation">
         <a href="#catalog" class="nav-catalog">Toolbox</a>
         <a href="#how-it-works">How it works</a>
         <span class="nav-divider" aria-hidden="true"></span>
-        <a href="https://github.com/poziel/wintool" class="icon-button" target="_blank" rel="noopener noreferrer" aria-label="Source code on GitHub (opens in a new tab)"><GitHubIcon /></a>
+        <a href="https://github.com/poziel/WinTools" class="icon-button" target="_blank" rel="noopener noreferrer" aria-label="Source code on GitHub (opens in a new tab)"><GitHubIcon /></a>
         <button type="button" class="icon-button" :aria-label="`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`" @click="toggleTheme"><Moon v-if="theme === 'light'" :size="19" /><Sun v-else :size="19" /></button>
       </nav>
     </header>

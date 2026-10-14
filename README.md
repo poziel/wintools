@@ -1,88 +1,114 @@
-# WinTools
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="public/icons/logo-dark.svg">
+    <img src="public/icons/logo-light.svg" alt="WinTools logo" width="112" height="112">
+  </picture>
+</p>
 
-A Vue website for discovering Windows utility scripts and copying their PowerShell commands.
+<h1 align="center">WinTools</h1>
 
-**Website:** https://wintools.poziel.dev
+<p align="center">Windows utilities, one command away.</p>
+
+WinTools brings useful Windows tools together in a searchable website and a PowerShell menu. Find a utility, copy its command, and launch it from your terminal without manually hunting down a download.
+
+**[Browse the tools at wintools.poziel.dev](https://wintools.poziel.dev)**
+
+## Get started
+
+Open a PowerShell session on Windows and run:
 
 ```powershell
 irm https://wintools.poziel.dev/get | iex
 ```
 
-Browse all 19 tools on the website, filter by category or search, and copy a command. The website runs entirely in the browser; utilities run in PowerShell on the user's Windows PC.
+The interactive menu loads the tool catalog. Enter a tool number to launch it, **L** to list commands, or **Q** to quit.
 
-## Development
+You need an internet connection to fetch scripts and applications. Some utilities require administrator privileges; follow the selected tool's requirements.
 
-Requires Node.js 22.12+ (Node 24 is used in CI).
+### Run a tool directly
+
+Each tool has its own command. For example, to launch CPU-Z:
+
+```powershell
+irm https://wintools.poziel.dev/cpuz | iex
+```
+
+Or open Process Explorer:
+
+```powershell
+irm https://wintools.poziel.dev/microsoft-procexp | iex
+```
+
+`irm` is short for `Invoke-RestMethod`: it downloads the script. `iex` is short for `Invoke-Expression`: it executes that script in PowerShell.
+
+### Find a tool on the website
+
+On [the WinTools website](https://wintools.poziel.dev), search by name or description, or filter the catalog by category. Each card includes a description, expandable features, and a link to the tool's official website.
+
+Use **Copy command** to copy a ready-to-run PowerShell command. The adjacent icon buttons let you **copy the tool name** or **view its script** before running it. The website helps you browse; the utilities run locally on your Windows computer.
+
+## What's in the toolbox?
+
+| Category | What it helps with | Examples |
+| --- | --- | --- |
+| Hardware & Diagnostics | Inspect hardware, monitor sensors and drive health, and benchmark storage. | CPU-Z, HWiNFO, CrystalDiskInfo, CrystalDiskMark |
+| Privacy & Optimization | Adjust privacy settings, reduce telemetry, and manage unwanted applications. | O&O ShutUp10++, O&O AppBuster, Optimizer, xd-AntiSpy |
+| Microsoft Sysinternals | Investigate startup entries, running processes, and system activity. | Autoruns, Process Explorer, Process Monitor |
+| System Utilities | Search files, clean up Windows, and work with the registry and other system tasks. | Everything, Cleanmgr+, O&O RegEditor |
+| Package Managers | Browse, install, update, and remove software through a graphical interface. | UniGetUI |
+
+The [website catalog](https://wintools.poziel.dev/#catalog) contains the full selection and details for each tool.
+
+## How it works
+
+The website and terminal menu share one catalog. Each entry points to a small PowerShell script that defines how to obtain and start the selected utility.
+
+For portable applications, the intended workflow is to download the application, extract it when needed, launch it, and remove its temporary files after use. Shared helpers handle downloading and launching. Some entries instead invoke an upstream script or installer, so their behavior depends on that project.
+
+### Current limitations
+
+Portable execution and cleanup are not yet reliable for every entry: the shared runner has known issues with extracted executable paths and its cleanup condition, and some helpers rely on Windows PowerShell-specific behavior. Temporary files may remain, or a utility may fail to launch.
+
+Cleanup concerns downloaded files; it does not undo settings changed by a tool or software installed through it. Review scripts with **View script** and consult the original project's documentation for the utility's behavior and requirements.
+
+## Contributing
+
+Tool descriptions and categories live in [public/tools.json](public/tools.json). Individual launch scripts live in [public/scripts/](public/scripts/), with shared helpers in [public/commons/](public/commons/).
+
+To add a tool:
+
+1. Create `public/scripts/<name>.ps1`, following an existing script's structure and documenting its purpose and usage.
+2. Add its `name`, `displayName`, `category`, `description`, `features`, `url`, and `website` to the catalog. Include `vendor` when applicable.
+3. Set the catalog URL to `https://wintools.poziel.dev/<name>.txt`. The website presents the shorter command URL without `.txt`.
+4. Run `npm test` and `npm run build` to validate the catalog and generated script endpoints.
+
+The shared catalog keeps the website and terminal menu in sync.
+
+### Work on the website
+
+The frontend uses Vue and Vite. Development requires Node.js 22.12 or newer.
 
 ```sh
 npm ci
 npm run dev
+```
+
+Run the checks and create a production build:
+
+```sh
 npm test
 npm run build
 npm run preview
 ```
 
-`npm run build` creates `dist/` and verifies the deployed files. Both the development server and production build support `/get` and the extensionless tool URLs. Unknown routes return 404 instead of the Vue page.
+Application components and styles live in `src/`. The build creates `dist/` and verifies that the script endpoints preserve the original script contents. These checks do not launch the Windows utilities.
 
-## Project structure
+### Branding assets
 
-- `src/` — Vue application, components, and styles
-- `index.html` — Vite entry point
-- `public/tools.json` — shared catalog, served at `/tools.json`
-- `public/get.ps1` — interactive PowerShell menu, served at `/get.ps1`, `/get`, and `/get.txt`
-- `public/scripts/` — tool scripts, served at `/scripts/<name>.ps1`, `/<name>`, and `/<name>.txt`
-- `public/commons/` — shared helpers, served at `/commons/<name>.ps1` and `/commons/<name>.ps1.txt`
-- `build/` — script endpoint generation and artifact verification
-- `tests/` — catalog search, commands, and endpoint checks
-- `.github/workflows/pages.yml` — validation and GitHub Pages deployment
+The [current icon kit](public/icons/) contains the SVG masters, light and dark variants, favicons, and platform exports as individual files. Its [asset guide](public/icons/README.md) describes the formats and how to regenerate them.
 
-Vite copies public assets without changing their content. The endpoint plugin emits byte-identical short and `.txt` aliases. GitHub Pages chooses response types by extension: `.txt` ensures the existing `Invoke-WebRequest(...).Content` calls receive strings. The menu's catalog URLs and helper fetch URLs therefore use those text aliases. Website commands use the short aliases through `Invoke-RestMethod`, which decodes the response as text. No script logic is changed to implement this.
-
-## Publishing on GitHub Pages
-
-The workflow validates pull requests to `master`. Pushes to `master`, or manual runs on `master`, build and publish `dist/` using the GitHub Pages artifact and deployment actions. It uses the repository's built-in `GITHUB_TOKEN`; no deployment secret is needed.
-
-One-time configuration:
-
-1. In the repository's **Settings → Pages**, select **GitHub Actions** as the build source.
-2. Set the custom domain to **wintools.poziel.dev**.
-3. At the DNS provider for `poziel.dev`, set the `wintools` CNAME to **poziel.github.io**. Replace any conflicting record for that subdomain.
-4. Once GitHub has validated DNS and issued the certificate, enable **Enforce HTTPS**.
-5. Push the reviewed changes to `master` or run the workflow from the Actions tab.
-
-`public/CNAME` records the intended hostname. For an Actions deployment, the custom domain must also be configured in the Pages settings. Vite's base is `/` because the site uses a custom domain.
-
-After deployment, verify the website and script responses:
-
-```powershell
-Invoke-WebRequest https://wintools.poziel.dev/get -UseBasicParsing
-Invoke-RestMethod https://wintools.poziel.dev/tools.json
-Invoke-WebRequest https://wintools.poziel.dev/cpuz -UseBasicParsing
-```
-
-These commands fetch content without executing a utility. The `/get` and `/cpuz` responses must contain PowerShell, not HTML.
-
-GitHub Pages setup: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
-
-Custom domain setup: https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
-
-## Adding a tool
-
-1. Create `public/scripts/<name>.ps1` following the existing script template.
-2. Add its name, display name, category, description, features, URL, and website to `public/tools.json`.
-3. Set its catalog URL to `https://wintools.poziel.dev/<name>.txt`. The website uses its equivalent short alias, `https://wintools.poziel.dev/<name>`.
-4. Run `npm test` and `npm run build`.
-
-The website and menu use the same catalog. The build rejects missing scripts, duplicate names, reserved paths, and incorrect command URLs.
-
-## PowerShell scope and existing limitations
-
-This website migration preserves the original PowerShell scripts and comments, changing only their URLs and repository locations. The menu now fetches `/tools.json` from the same site instead of the incorrect raw GitHub `main` URL. The scripts still display their original branding where it occurs in their text.
-
-The intended portable-tool workflow is download, launch, then cleanup. The existing runner still has known issues: its `NoCleanup` condition is reversed, extracted executable paths are assembled incorrectly, and some helpers depend on Windows PowerShell-specific behavior. Upstream-script and installer entries do not all follow the portable workflow. This migration does not claim to fix or validate those behaviors; running a tool can also make persistent system changes. Script fixes require a separate change.
-
-Source links currently point to the existing `poziel/wintool` GitHub repository. Renaming the GitHub repository and local checkout are separate from renaming the website and its domain.
+Earlier portable-case, WT badge, and WT ligature concepts are preserved in the [branding archive](docs/branding-archive/) as part of the project's design history.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+WinTools is available under the [MIT License](LICENSE). Third-party utilities retain their own licenses and terms.
