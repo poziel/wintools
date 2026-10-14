@@ -63,4 +63,4 @@ The catalog is used by:
 **Comments**: Include comprehensive header comments explaining tool purpose, features, usage, and workflow. No inline comments unless necessary for complex logic.
 
 ## Migration constraint
-Preserve PowerShell behavior and comments; only URL replacements and file moves are authorized in this website conversion. All new UI work belongs in Vue components. The existing runner issues are documented in README.md.
+The website conversion preserved PowerShell behavior and comments. Subsequent runner repairs are authorized separately: maintain compatibility with Windows PowerShell 5.1 and PowerShell 7, and validate with tests/downloadrun.ps1 without launching real utilities. All new UI work belongs in Vue components.

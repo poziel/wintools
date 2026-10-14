@@ -42,7 +42,7 @@ function ExtractFiles {
     switch -regex ($Source) {
         "\.zip$" {
             Write-Output "Uncompressing ZIP file..."
-            Expand-Archive -Path $Source -DestinationPath $Destination -Force
+            Expand-Archive -LiteralPath $Source -DestinationPath $Destination -Force -ErrorAction Stop
         }
         "\.tar$" {
             Write-Output "Uncompressing TAR file..."
@@ -88,6 +88,8 @@ if (-not $Url) {
     return
 }
 
+$Tmp = $Tmp.Replace('{tmp}', $env:TEMP).Replace('{timestamp}', $timestamp).Replace('{uuid}', $uuid)
+
 # Check if the temp folder exists; create it if necessary
 if (!(Test-Path -Path $Tmp)) {
     # Create the folder
@@ -98,24 +100,24 @@ if (!(Test-Path -Path $Tmp)) {
 }
 
 # Replace custom variables in the arguments
-$Tmp = $Tmp -replace "\{tmp\}", [regex]::Escape($env:TEMP)
-$Tmp = $Tmp -replace "\{timestamp\}", [regex]::Escape($timestamp)
-$Tmp = $Tmp -replace "\{uuid\}", [regex]::Escape($uuid)
+$Tmp = [System.IO.Path]::GetFullPath($Tmp)
+$appFolder = $null
+$createdAppFolder = $false
 
 # Set error handling
 try {
     # Check if the URL points to a GitHub repository or a direct URL
-    if ($Url -match "^https://github\.com/([^/]+)/([^/]+)") {
+    if ($Url -match "^https://github\.com/([^/]+)/([^/]+)/?$") {
         $repoOwner = $matches[1]
         $repoName = $matches[2]
         $apiUrl = "https://api.github.com/repos/$repoOwner/$repoName/releases/latest"
         
         Write-Output "Fetching latest release information from GitHub for $repoOwner/$repoName..."
         # Retrieve latest release information from GitHub
-        $response = Invoke-RestMethod -Uri $apiUrl -Headers @{ "User-Agent" = "PowerShell" }
+        $response = Invoke-RestMethod -Uri $apiUrl -Headers @{ "User-Agent" = "PowerShell" } -ErrorAction Stop
 
         # Filter assets based on the 'match' pattern for GitHub
-        $asset = $response.assets | Where-Object { $_.name -match "^$GithubMatch(\..+)?$" } | Select-Object -First 1
+        $asset = $response.assets | Where-Object { $_.name -like $GithubMatch -or $_.name -like "$GithubMatch.*" } | Select-Object -First 1
         if ($null -eq $asset) {
             Write-Output "No file matching '$GithubMatch' found in the latest release for $repoOwner/$repoName. Exiting."
             return
@@ -141,6 +143,8 @@ try {
     # $appFolder = Join-Path -Path $Tmp -ChildPath $Name
     # $appPath = Join-Path -Path $appFolder -ChildPath ([System.IO.Path]::GetFileName($downloadUrl))
 
+    $downloadFileName = [System.IO.Path]::GetFileName(([uri]$downloadUrl).AbsolutePath)
+
     # Parse `$ArchiveApp` to determine folder and file names
     if ($Name -match "\\|/") {
         # If `$Name` includes a path (e.g., "hwinfo\latest" or "hwinfo\app.zip")
@@ -156,22 +160,22 @@ try {
     if ($folderName) {
         $Name = $folderName
     } elseif (-not $Name) {
-        $Name = ([System.IO.Path]::GetFileNameWithoutExtension($downloadUrl) -replace '[^a-zA-Z0-9]', '')
+        $Name = ([System.IO.Path]::GetFileNameWithoutExtension($downloadFileName) -replace '[^a-zA-Z0-9]', '')
     }
 
     # Apply replacements for `{timestamp}` and `{uuid}` in `$Name` if they exist
-    $Name = $Name -replace "\{timestamp\}", [regex]::Escape($timestamp)
-    $Name = $Name -replace "\{uuid\}", [regex]::Escape($uuid)
+    $Name = $Name.Replace('{timestamp}', $timestamp).Replace('{uuid}', $uuid)
 
     # Define `$appFolder` and `$appPath`
-    $appFolder = Join-Path -Path $Tmp -ChildPath $Name
+    $safeName = $Name -replace '[^a-zA-Z0-9_-]', '_'
+    $appFolder = Join-Path -Path $Tmp -ChildPath "$safeName-$uuid"
 
     # Set file name based on `$fileName` or fallback to default from `$downloadUrl`
     Write-Output "File name: $fileName"
     if ($fileName -and $fileName -ne "*") {
         if ($fileName -like "*.") {
             # If `$fileName` ends with `.*`, retain the original file extension from the download URL
-            $defaultExtension = [System.IO.Path]::GetExtension($downloadUrl)
+            $defaultExtension = [System.IO.Path]::GetExtension($downloadFileName)
             $appPath = Join-Path -Path $appFolder -ChildPath ($fileName.TrimEnd('.') + $defaultExtension)
         } else {
             # Use `$fileName` as-is
@@ -179,7 +183,12 @@ try {
         }
     } else {
         # Default to the original downloaded file name
-        $appPath = Join-Path -Path $appFolder -ChildPath ([System.IO.Path]::GetFileName($downloadUrl))
+        $appPath = Join-Path -Path $appFolder -ChildPath $downloadFileName
+    }
+
+    $appPath = [System.IO.Path]::GetFullPath($appPath)
+    if (-not $appPath.StartsWith($appFolder + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw 'The download filename must stay inside the run folder.'
     }
 
     # Log the application name at the top of the script
@@ -192,16 +201,13 @@ try {
     Write-Output ('-' * $length)
     Write-Output ""
 
-    # Delete the existing folder if it exists then create a new folder
-    if (Test-Path -Path $appFolder) {
-        Write-Output "Folder already exists. Deleting existing folder..."
-        Remove-Item -Path $appFolder -Recurse -Force
-    }
-    New-Item -ItemType Directory -Path $appFolder -Force | Out-Null
+    # Create an isolated folder owned by this run.
+    New-Item -ItemType Directory -Path $appFolder -ErrorAction Stop | Out-Null
+    $createdAppFolder = $true
 
     # Download the file to the specified folder with progress bar
     Write-Output "Downloading file from $downloadUrl to $appPath..."
-    Start-BitsTransfer -Source $downloadUrl -Destination $appPath
+    Invoke-WebRequest -Uri $downloadUrl -OutFile $appPath -UseBasicParsing -ErrorAction Stop
 
     # Check if the downloaded file is a compressed file
     if ($appPath -match "\.zip$") {
@@ -212,18 +218,16 @@ try {
             # If `$ArchiveApp` is specified, find the specified file recursively in the uncompressed folder
             $targetFile = Get-ChildItem -Path $appFolder -Recurse -Filter $ArchiveApp | Select-Object -First 1
             if (-not $targetFile) {
-                Write-Error "No file matching '$ArchiveApp' was found in the extracted files."
-                return
+                throw "No file matching '$ArchiveApp' was found in the extracted files."
             }
         } else {
             # If `$ArchiveApp` is not specified, find the first executable file (.exe)
             $targetFile = Get-ChildItem -Path $appFolder -Recurse -Filter "*.exe" | Select-Object -First 1
             if (-not $targetFile) {
-                Write-Error "No executable file found in the extracted files."
-                return
+                throw "No executable file found in the extracted files."
             }
         }
-        $targetFile = Join-Path -Path $appFolder -ChildPath $targetFile
+        $targetFile = $targetFile.FullName
     } else {
         # If it's not a compressed file, set the downloaded path as the target file
         $targetFile = $appPath
@@ -233,10 +237,11 @@ try {
     $startArgs = @{
         FilePath = $targetFile
         Wait = $true
+        WorkingDirectory = $appFolder
+        ErrorAction = 'Stop'
     }
     if ($AppArgs) {
-        $AppArgs = $AppArgs -replace "\{tmp\}", [regex]::Escape($env:TEMP)
-        $AppArgs = $AppArgs -replace "\{installdir\}", [regex]::Escape($appFolder)
+        $AppArgs = $AppArgs.Replace('{tmp}', $env:TEMP).Replace('{installdir}', $appFolder)
         $startArgs.ArgumentList = $AppArgs
     }
     if ($AppAdmin) {
@@ -246,19 +251,16 @@ try {
     Start-Process @startArgs
 
 } catch {
-    Write-Error "An error occurred: $_"
+    throw
 } finally {
 
     # Optional cleanup step
-    if ($NoCleanup) {
+    if (-not $NoCleanup -and $createdAppFolder -and (Test-Path -LiteralPath $appFolder)) {
         Write-Output "Cleaning up..."
-        Remove-Item -Path $appFolder -Recurse -Force | Out-Null
+        Remove-Item -LiteralPath $appFolder -Recurse -Force -ErrorAction Stop | Out-Null
 
         # Check if $Tmp directory is empty and delete if necessary
-        if ((Test-Path -Path $Tmp) -and !(Get-ChildItem -Path $Tmp -Recurse | Measure-Object).Count) {
-            Write-Output "Temporary directory is empty. Deleting $Tmp..."
-            Remove-Item -Path $Tmp -Force | Out-Null
-        }
+        # Keep the caller's temporary root; other runs may be using it.
     }
 }
 

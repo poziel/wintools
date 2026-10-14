@@ -33,9 +33,21 @@ jobs:
         with:
           path: dist
 
+  test-runner:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Test runner on PowerShell 7
+        shell: pwsh
+        run: ./tests/downloadrun.ps1
+      - name: Test runner on Windows PowerShell 5.1
+        shell: powershell
+        run: ./tests/downloadrun.ps1
+
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
-    needs: build
+    needs: [build, test-runner]
     runs-on: ubuntu-latest
     permissions:
       pages: write

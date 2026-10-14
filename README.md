@@ -67,7 +67,7 @@ For portable applications, the intended workflow is to download the application,
 
 ### Current limitations
 
-Portable execution and cleanup are not yet reliable for every entry: the shared runner has known issues with extracted executable paths and its cleanup condition, and some helpers rely on Windows PowerShell-specific behavior. Temporary files may remain, or a utility may fail to launch.
+The shared runner waits for the launched process and removes its own temporary folder by default; `-NoCleanup` retains it. Utilities that start separate processes or run installers may have a different lifecycle. Some other helpers still rely on Windows PowerShell-specific behavior, and upstream downloads can change or become unavailable.
 
 Cleanup concerns downloaded files; it does not undo settings changed by a tool or software installed through it. Review scripts with **View script** and consult the original project's documentation for the utility's behavior and requirements.
 
@@ -102,6 +102,8 @@ npm run preview
 ```
 
 Application components and styles live in `src/`. The build creates `dist/` and verifies that the script endpoints preserve the original script contents. These checks do not launch the Windows utilities.
+
+On Windows, run `pwsh -NoProfile -File tests/downloadrun.ps1` and `powershell -NoProfile -ExecutionPolicy Bypass -File tests/downloadrun.ps1` to check the runner in both PowerShell versions. These checks use dummy downloads and a simulated process launch; they also run before deployment.
 
 ### Branding assets
 
